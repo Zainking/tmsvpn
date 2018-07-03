@@ -1,0 +1,11 @@
+.newbtn {
+  background: linear-gradient(to left,#c9f,#0cf);
+  padding: 10px 0;
+  text-align: center;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.newbtn:hover {
+  background: linear-gradient(to right,#c9f,#0cf);
+}
