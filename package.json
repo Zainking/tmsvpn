@@ -4,7 +4,8 @@
     "start": "roadhog server",
     "build": "roadhog build",
     "lint": "eslint --ext .js src test",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "deploy": "node ./node_modules/git-deployer/index -r git@github.com:Zainking/tmsvpn.git -d ./dist"
   },
   "dependencies": {
     "antd": "^3.6.5",
@@ -20,6 +21,7 @@
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
+    "git-deployer": "^1.0.2",
     "husky": "^0.12.0",
     "redbox-react": "^1.4.3",
     "roadhog": "^2.0.0"

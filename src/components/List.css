@@ -5,3 +5,11 @@
 .card:hover {
     box-shadow: 0 0 5px #eee;
 }
+.btnAdd {
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.5s;
+}
+.btnAdd:hover {
+    transform:rotate(180deg);
+}

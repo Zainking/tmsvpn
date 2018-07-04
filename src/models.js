@@ -20,7 +20,7 @@ export default {
 
   reducers: {
     save(state, action) {
-      return { ...state, list: action.payload };
+      return { ...state, list: action.payload || [] };
     },
   },
 
