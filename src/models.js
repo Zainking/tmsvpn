@@ -47,11 +47,12 @@ export default {
     },
     *generatePayCode({ payload }, { call, put, select }) {
       const { id } = yield select(state => state.users.currentUser)
-      const { cat } = yield select(state => state.users.pay)
+      const { cat, pollingId } = yield select(state => state.users.pay)
       if (!cat) {
         message.error('请先选择套餐')
         return false
       }
+      clearInterval(pollingId)
       yield put({ type: 'startGeneratePayCode' })
       const result = yield call(fetchCode, { id, cat })
       if (result.data.status === 1) {
