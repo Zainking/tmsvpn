@@ -1,0 +1,14 @@
+.pay {
+  text-align: center;
+}
+.payCode {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  background-color: #eee;
+  margin: 10px 0;
+}
+.payImg {
+  width: 200px;
+  height: 200px;
+}

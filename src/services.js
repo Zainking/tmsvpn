@@ -25,3 +25,21 @@ export function signup({ username, password }) {
     })
   });
 }
+
+export function fetchCode({ cat, id }) {
+  return request(`https://pay.tms.im/apipaytrans`, {
+    method: "POST",
+    body: objectToFormData({
+      cat, id
+    })
+  })
+}
+
+export function polling(tradeno) {
+  return request(`https://pay.tms.im/status`, {
+    method: "POST",
+    body: objectToFormData({
+      tradeno
+    })
+  })
+}

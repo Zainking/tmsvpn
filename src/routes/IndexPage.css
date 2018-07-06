@@ -13,3 +13,12 @@ main {
 .normal {
   font-family: Georgia, sans-serif;
 }
+.logo{
+    display: inline-block;
+    max-width: 200px;
+    margin: 10px 0;
+    background-clip:padding-box,border-box;
+    background-origin:padding-box,border-box;
+    background-image:linear-gradient(135deg,#fff,#fff),linear-gradient(135deg,#c9f,#0cf);
+    border: 2px transparent solid;
+}
