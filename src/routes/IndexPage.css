@@ -12,9 +12,10 @@ main {
 }
 .normal {
   font-family: Georgia, sans-serif;
+  position: relative;
 }
 .logo{
-    display: inline-block;
+    display: block;
     max-width: 200px;
     margin: 10px 0;
     background-clip:padding-box,border-box;

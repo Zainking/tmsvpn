@@ -5,15 +5,18 @@ import Pay from './Pay'
 
 import styles from './List.css'
 
-const renderCard = (inner, handleClick) => (
-  <Col sm={24} md={8} key={inner.id}>
-    <Card title={inner.user_name} className={styles.card} bordered={false}>
-      连接端口： {inner.port} <br/>
-      流量使用： {inner.used_f} / {inner.transfer_enable_f} <Icon onClick={handleClick(inner)} type="plus-circle-o" className={styles.btnAdd} /> <br />
-      <Progress status={inner.used / parseInt(inner.transfer_enable, 10) >= 1 ? 'exception' : 'active'} percent={(inner.used / parseInt(inner.transfer_enable, 10) * 100).toFixed(1)}/>
-    </Card>
-  </Col>
-)
+const renderCard = (inner, handleClick) => {
+  const percent = parseFloat((inner.used / parseInt(inner.transfer_enable, 10) * 100).toFixed(1))
+  return (
+    <Col sm={24} md={8} key={inner.id}>
+      <Card title={inner.user_name} className={styles.card} bordered={false}>
+        连接端口： {inner.port} <br/>
+        流量使用： {inner.used_f} / {inner.transfer_enable_f} <Icon onClick={handleClick(inner)} type="plus-circle-o" className={styles.btnAdd} /> <br />
+        <Progress status={inner.used / parseInt(inner.transfer_enable, 10) >= 1 ? 'exception' : 'active'} percent={percent}/>
+      </Card>
+    </Col>
+  )
+}
 
 const mapState = ({ users }) => ({ list: users.list, currentUser: users.currentUser })
 
