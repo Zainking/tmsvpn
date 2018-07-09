@@ -1,5 +1,5 @@
 
-import { queryList, signup, fetchCode, polling, open } from './services'
+import { queryList, signup, fetchCode, polling, open, queryLuckys } from './services'
 import { message } from 'antd';
 
 const openOneBox = (box) => {
@@ -20,7 +20,7 @@ const openOneBox = (box) => {
       message.success(`您的箱子品质为 钻石宝箱！！ ，获得流量 ${box.flow}`)
       break
     case 6:
-      message.success(`恭喜你！！！你开到了TMS背着老婆偷偷藏起来的宝♂藏！！！，获得流量 ${box.flow}`)
+      message.success(`恭喜你！！！你开到了TMs背着老婆偷偷藏起来的宝♂藏！！！，获得流量 ${box.flow}`)
       break
     default:
   }
@@ -49,17 +49,25 @@ export default {
       password: undefined,
       box: undefined,
       isOpening: false
-    }
+    },
+    luckys: []
   },
 
   effects: {
     *fetch({ payload }, { call, put, select }) {  // eslint-disable-line
       const list = yield call(queryList)
       const currentUser = yield select(state => state.users.currentUser)
+      const luckys = yield call(queryLuckys)
       yield put({
         type: 'save',
         payload: list.data
       })
+      if (luckys.data.status === 1) {
+        yield put({
+          type: 'saveLuckys',
+          payload: luckys.data.msg
+        })
+      }
       if (currentUser.id) {
         yield put({
           type: 'refeshCurrentUser'
@@ -120,6 +128,9 @@ export default {
   reducers: {
     save(state, action) {
       return { ...state, list: action.payload || [] };
+    },
+    saveLuckys(state, action) {
+      return { ...state, luckys: action.payload || [] };
     },
     saveRegInfo(state, action) {
       return { ...state, signup: { ...state.signup, ...action.payload } }

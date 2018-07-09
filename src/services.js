@@ -17,6 +17,10 @@ export function queryList() {
   return request('https://api.tms.im/s/list');
 }
 
+export function queryLuckys() {
+  return request('https://api.tms.im/s/announcement');
+}
+
 export function signup({ username, password }) {
   return request('https://api.tms.im/s/create', {
     method: "POST",
