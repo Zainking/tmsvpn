@@ -1,6 +1,31 @@
 
-import { queryList, signup, fetchCode, polling } from './services'
+import { queryList, signup, fetchCode, polling, open } from './services'
 import { message } from 'antd';
+
+const openOneBox = (box) => {
+  switch (box.quality) {
+    case 1: 
+      message.success(`您的箱子品质为 垃圾箱 ，获得流量 ${box.flow}`)
+      break
+    case 2:
+      message.success(`您的箱子品质为 废旧的箱子 ，获得流量 ${box.flow}`)
+      break
+    case 3:
+      message.success(`您的箱子品质为 普通宝箱 ，获得流量 ${box.flow}`)
+      break
+    case 4:
+      message.success(`您的箱子品质为 漂亮的箱子 ，获得流量 ${box.flow}`)
+      break
+    case 5:
+      message.success(`您的箱子品质为 钻石宝箱！！ ，获得流量 ${box.flow}`)
+      break
+    case 6:
+      message.success(`恭喜你！！！你开到了TMS背着老婆偷偷藏起来的宝♂藏！！！，获得流量 ${box.flow}`)
+      break
+    default:
+  }
+}
+
 export default {
 
   namespace: 'users',
@@ -19,6 +44,11 @@ export default {
       isPaying: false,
       pollingId: '',
       imgBase64: ''
+    },
+    openBox: {
+      password: undefined,
+      box: undefined,
+      isOpening: false
     }
   },
 
@@ -66,6 +96,24 @@ export default {
         }, 1000)
       }
       yield put({ type: 'finishGeneratePayCode', payload: result.data })
+    },
+    *openBox({ payload }, { call, put, select }) {
+      const { id } = yield select(state => state.users.currentUser)
+      const { password, box } = yield select(state => state.users.openBox)
+      if (!password) {
+        message.error('请输入密码')
+        return false
+      }
+      if (!box) {
+        message.error('请选择箱子数量')
+        return false
+      }
+      yield put({ type: 'startOpen' })
+      const result = yield call(open, {id, password, box})
+      if (result.data.status === 1) {
+        yield window.dispatch({ type: 'users/fetch' })
+      }
+      yield put({ type: 'finishOpen', payload: result.data })
     }
   },
 
@@ -76,11 +124,18 @@ export default {
     saveRegInfo(state, action) {
       return { ...state, signup: { ...state.signup, ...action.payload } }
     },
+    saveOpen(state, action) {
+      const openBox = action.payload
+      return { ...state, openBox: { ...state.openBox, ...openBox } }
+    },
     startReg(state) {
       return { ...state, signup: { ...state.signup, isRegisting: true  }}
     },
     startGeneratePayCode(state) {
       return { ...state, pay: { ...state.pay, isGenerating: true } }
+    },
+    startOpen(state) {
+      return { ...state, openBox: { ...state.openBox, isOpening: true } }
     },
     finishReg(state, action) {
 
@@ -127,6 +182,25 @@ export default {
           isPaying: false,
         }
       }
+    },
+    finishOpen(state, action) {
+      const { status, msg } = action.payload
+      switch (status) {
+        case 0:
+          message.error(msg)
+          break
+        case 1:
+          msg.forEach(box => openOneBox(box))
+          break
+        case 2:
+          message.warn(msg)
+          break
+        default:
+      }
+      return { ...state, openBox: { ...state.openBox, isOpening: false } }
+    },
+    closeOpen(state, action) {
+      return { ...state, openBox: { ...state.openBox, password: undefined } }
     },
     closePay(state) {
       clearInterval(state.pay.pollingId)

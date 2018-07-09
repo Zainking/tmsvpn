@@ -13,7 +13,6 @@ class Pay extends React.Component {
     dispatch({
       type: 'users/generatePayCode'
     })
-
   }
   handleSelect = val => {
     const { dispatch } = this.props

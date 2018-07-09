@@ -18,7 +18,7 @@ const renderCard = (inner, handleClick) => {
   )
 }
 
-const mapState = ({ users }) => ({ list: users.list, currentUser: users.currentUser })
+const mapState = ({ users }) => ({ list: users.list, currentUser: users.currentUser, openBox: users.openBox })
 
 class List extends React.Component {
   constructor() {
@@ -50,11 +50,30 @@ class List extends React.Component {
     dispatch({
       type: 'users/closePay',
     })
+    dispatch({
+      type: 'users/closeOpen',
+    })
     this.setState({ isModalVisible: false })
   }
 
+  handleInput = e => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'users/saveOpen',
+      payload: { [e.target.id]: e.target.value }
+    })
+  }
+
+  handleSubmit = e => {
+    const { dispatch } = this.props
+    e.preventDefault()
+    dispatch({
+      type: 'users/openBox'
+    })
+  }
+
   render() {
-    const { list, currentUser } = this.props
+    const { list, currentUser, openBox } = this.props
     return (
       <div>
         <Row gutter={16}>
@@ -75,12 +94,15 @@ class List extends React.Component {
             <Tabs.TabPane tab="开箱" key="2">
               剩余箱子数量: {currentUser.box_num} <br/>
               <br/>
-              <Form>
+              <Form onSubmit={this.handleSubmit}>
                 <Form.Item>
-                  <Input type="password" placeholder={`请输入${currentUser.user_name}的密码`} />
+                  <Input id="password" onInput={this.handleInput} type="password" value={openBox.password} placeholder={`请输入${currentUser.user_name}的密码`} />
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit">一键开箱子</Button>
+                  <Input min="1" id="box" onInput={this.handleInput} type="number" value={openBox.box} placeholder="请输入开箱数量" />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" loading={openBox.isOpening}>一键开箱子</Button>
                 </Form.Item>
               </Form>
             </Tabs.TabPane>

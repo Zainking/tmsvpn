@@ -43,3 +43,15 @@ export function polling(tradeno) {
     })
   })
 }
+
+export function open(openBox) {
+  const finalOpenBox = {
+    id: openBox.id,
+    pass: openBox.password,
+    box: openBox.box
+  }
+  return request(`https://api.tms.im/s/openbox`, {
+    method: "POST",
+    body: objectToFormData(finalOpenBox)
+  })
+}
